@@ -87,7 +87,7 @@ function TagComponent() {
       });
       dispatch(addTagSuccess(response.data));
       setTagName('');
-      handleCloseModal();
+      handleHideModal();
     } catch (error) {
       console.error('Error adding tag:', error);
     }
@@ -114,14 +114,13 @@ function TagComponent() {
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const handleHideModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
   return (
-    <div>
-      <Button variant="primary" onClick={() => setShowModal(true)}>Add Tag</Button>
-      <Modal show={showModal} onHide={handleCloseModal}>
+    <>
+      <Button variant="primary" onClick={handleShowModal} >Add Tag</Button>
+      <Modal show={showModal} onHide={handleHideModal} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Add Tag</Modal.Title>
         </Modal.Header>
@@ -134,7 +133,7 @@ function TagComponent() {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+          <Button variant="secondary" onClick={handleHideModal}>Close</Button>
           <Button variant="primary" onClick={handleAddTag}>Add</Button>
         </Modal.Footer>
       </Modal>
@@ -151,7 +150,7 @@ function TagComponent() {
           <li>No tags found</li>
         )}
       </ul>
-    </div>
+    </>
   );
 };
 
