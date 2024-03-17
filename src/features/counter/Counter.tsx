@@ -10,6 +10,7 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import Button from 'react-bootstrap/Button'
 
 export function Counter() {
   const count = useAppSelector(selectCount);
@@ -62,6 +63,9 @@ export function Counter() {
         >
           Add If Odd
         </button>
+        <Button as="a" variant="primary">
+          Button as link
+        </Button>
       </div>
     </div>
   );
