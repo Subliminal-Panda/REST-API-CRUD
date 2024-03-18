@@ -49,7 +49,7 @@ function WorkspaceSearch() {
                     </Button>
                 </Card.Body>
                 {validWorkspace ? 
-                    <FileComponent /> : 
+                    <FileComponent workspace={workspace} /> : 
                     <p>
                         Please submit a valid workspace to query files.
                     </p>
