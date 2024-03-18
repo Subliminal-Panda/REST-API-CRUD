@@ -1,6 +1,5 @@
-// Import necessary libraries
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Button, Form, Modal, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { RootState } from '../redux/store/store';
@@ -9,17 +8,19 @@ import { fetchFiles } from '../redux/actions/fileActions';
 import { addFileSuccess, deleteFileSuccess, updateFileSuccess } from '../redux/reducers/filesReducer';
 import { File } from '../redux/types/fileType';
 
-// Component
 function FileComponent() {
   const [fileName, setFileName] = useState('');
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-  const files = useSelector((state: RootState) => state.files);
+  const files: File[] = useSelector((state: RootState) => state.files);
 
   useEffect(() => {
-    // Fetch files on component mount
     fetchFiles();
   }, []);
+
+  useEffect(() => {
+    console.log({files});
+  }, [files])
 
   const handleAddFile = async () => {
     try {
@@ -59,8 +60,8 @@ function FileComponent() {
   const handleShowModal = () => setShowModal(true);
 
   return (
-    <>
-      <Button variant="primary" onClick={handleShowModal} >Add File</Button>
+    <div className="container">
+      <Button variant="primary" onClick={handleShowModal} className="w-25 mb-3" >Add File</Button>
       <Modal show={showModal} onHide={handleHideModal} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Add File</Modal.Title>
@@ -79,20 +80,36 @@ function FileComponent() {
           <Button variant="primary" onClick={handleAddFile}>Add</Button>
         </Modal.Footer>
       </Modal>
-      <ul>
+
       {files ? (
-          files.map((file: File) => (
-            <li key={file.filePath}>
-              {file.filename}
-              <Button variant="warning" onClick={() => handleUpdateFile(file)}>Edit</Button>
-              <Button variant="danger" onClick={() => handleDeleteFile(file.filePath)}>Delete</Button>
-            </li>
-          ))
-        ) : (
-          <li>No files found</li>
-        )}
-      </ul>
-    </>
+        <Table striped bordered hover >
+          <thead>
+            <tr>
+              <th>File Name:</th>
+              <th>Directory Path:</th>
+              <th>Length:</th>
+            </tr>
+          </thead>
+          <tbody>
+          {files.map((file: File) => (
+            <tr>
+              <td>{file.filename}</td>
+              <td>{file.directoryPath}</td>
+              <td>{file.contentLength}</td>
+              <td>
+                <Button variant="warning" onClick={() => handleUpdateFile(file)}>Edit</Button>
+              </td>
+              <td>
+                <Button variant="danger" onClick={() => handleDeleteFile(file.filePath)}>Delete</Button>
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </Table>
+          ) : (
+        <p>No files found</p>
+      )}
+    </div>
   );
 };
 

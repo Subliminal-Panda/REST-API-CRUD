@@ -1,5 +1,4 @@
 import { ActionTypes, File, FileActionTypes } from '../types/fileType';
-// import { ActionTypes } from '../types/types';
 import { Dispatch } from 'redux';
 import { fetchFilesAPI } from '../../services/fileService';
 
