@@ -30,14 +30,11 @@ function FileComponent(props: fileComponentProps) {
 
   const handleAddFile = async () => {
     try {
-      // @ts-expect-error
-      let dataInBuffer = new Buffer.from(fileToUpload);
-
       let formData = new FormData();
 
       formData.append('items', new Blob([JSON.stringify({
           name: fileName,
-          data: dataInBuffer
+          data: fileToUpload
       })], {
           type: "application/octet-stream"
       }));
