@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { RootState } from '../redux/store/store';
 import { MDBFile } from 'mdb-react-ui-kit';
 import { Buffer } from 'buffer';
@@ -28,31 +28,37 @@ function FileComponent(props: fileComponentProps) {
     console.log({workspace})
   }, [workspace]);
 
-  const handleAddFile = async () => {
-    try {
-      let formData = new FormData();
+  const handleUploadFile = async () => {
+      // Create a new FormData object
+    const formData = new FormData();
+    // Append the file to the FormData object
+    formData.append('file', fileToUpload);
 
-      formData.append('items', new Blob([JSON.stringify({
-          name: fileName,
-          data: fileToUpload
-      })], {
-          type: "application/octet-stream"
-      }));
-
-      console.log('created formData.')
-      const response = await axios.post(
-        'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath + '/' + fileName,
-          {transformRequest: [(data: any, headers: any) => {
-            delete headers.common.contentType;
-            data.append(formData);
-            return data 
-        }]},
-        {
-          headers: {
-            'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz',
-            'content-type': 'application/octet-stream'
-          },
+    // Define custom headers
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/octet-stream', // Set the desired content type here
+        'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
+      },
+      transformRequest: [(data: any, headers: any) => {
+        // Ensure to set the desired Content-Type header
+        headers['Content-Type'] = 'application/octet-stream';
+        // If the data is a FormData object, return it directly
+        if (data instanceof FormData) {
+          return data;
         }
+        // Otherwise, create a new FormData object and append the file to it
+        const formData = new FormData();
+        formData.append('file', data);
+        return formData;
+      }],
+    };
+
+    try {
+      const response = await axios.post(
+        'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
+        formData,
+        config
       );
       dispatch(addFileSuccess(response.data));
       setDirectoryPath('');
@@ -66,7 +72,7 @@ function FileComponent(props: fileComponentProps) {
   const handleDeleteFile = async (directoryPath: string, fileName: string) => {
     try {
       await axios.delete(
-        'https://api.optilogic.app/v0/' + workspace + '/file' + directoryPath + '/' + fileName,
+        'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
         {
           headers: {
             'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
@@ -79,8 +85,8 @@ function FileComponent(props: fileComponentProps) {
     }
   };
 
-  const handleUploadFile = (e: any) => {
-    setFileToUpload(e.target.files)
+  const handleAddFile = (e: any) => {
+    setFileToUpload(e.target.files[0])
   }
 
   const handleHideModal = () => setShowModal(false);
@@ -110,12 +116,12 @@ function FileComponent(props: fileComponentProps) {
           />
           <Form.Control
             type="file"
-            onChange={e => handleUploadFile(e)}
+            onChange={e => handleAddFile(e)}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleHideModal}>Close</Button>
-          <Button variant="primary" onClick={handleAddFile}>Add</Button>
+          <Button variant="primary" onClick={handleUploadFile}>Add</Button>
         </Modal.Footer>
       </Modal>
 
