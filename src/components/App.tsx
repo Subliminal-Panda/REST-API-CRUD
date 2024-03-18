@@ -1,7 +1,5 @@
-import React from 'react';
-import logo from '../assets/images/logo.svg';
 import '../styles/App.css';
-import TagComponent from './TagComponent';
+import TagComponent from './FileComponent';
 
 function App() {
   return (

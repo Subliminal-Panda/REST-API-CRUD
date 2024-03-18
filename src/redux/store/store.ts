@@ -1,11 +1,10 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import tagsReducer from '../reducers/tagsReducer'; // Assuming you have a separate file for tagsReducer
+import { combineReducers } from 'redux';
+import filesReducer from '../reducers/filesReducer';
 import { configureStore } from '@reduxjs/toolkit';
 
 // Root reducer combining all reducers
 const rootReducer = combineReducers({
-  tags: tagsReducer,
+  files: filesReducer,
 });
 
 // Define RootState type
