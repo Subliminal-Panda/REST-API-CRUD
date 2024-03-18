@@ -1,6 +1,5 @@
-import { File } from "../types/FileType";
+import { File } from "../types/fileType";
 
-// Define action types
 enum ActionTypes {
   FETCH_FILES_SUCCESS = 'FETCH_FILES_SUCCESS',
   ADD_FILE_SUCCESS = 'ADD_FILE_SUCCESS',

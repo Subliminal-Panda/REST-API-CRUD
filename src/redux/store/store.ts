@@ -1,6 +1,5 @@
-import { combineReducers } from 'redux';
 import filesReducer from '../reducers/filesReducer';
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 // Root reducer combining all reducers
 const rootReducer = combineReducers({

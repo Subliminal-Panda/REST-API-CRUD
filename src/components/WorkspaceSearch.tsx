@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { fetchFilesSuccess } from '../redux/reducers/filesReducer';
-import { File } from '../redux/types/FileType';
+import { File } from '../redux/types/fileType';
 
 function WorkspaceSearch() {
     const [workspace, setWorkspace] = useState('')

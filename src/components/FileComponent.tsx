@@ -7,7 +7,7 @@ import { RootState } from '../redux/store/store';
 import { MDBFile } from 'mdb-react-ui-kit';
 import { fetchFiles } from '../redux/actions/fileActions';
 import { addFileSuccess, deleteFileSuccess, updateFileSuccess } from '../redux/reducers/filesReducer';
-import { File } from '../redux/types/FileType';
+import { File } from '../redux/types/fileType';
 
 // Component
 function FileComponent() {
