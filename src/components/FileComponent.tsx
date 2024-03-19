@@ -1,61 +1,60 @@
+import axios, { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import axios, { AxiosRequestConfig } from 'axios';
+
 import { RootState } from '../redux/store/store';
-import { MDBFile } from 'mdb-react-ui-kit';
-import { Buffer } from 'buffer';
 import { fetchFiles } from '../redux/actions/fileActions';
-import { addFileSuccess, deleteFileSuccess, updateFileSuccess } from '../redux/reducers/filesReducer';
+import { addFileSuccess, deleteFileSuccess } from '../redux/reducers/filesReducer';
 import { File } from '../redux/types/fileType';
 
 interface fileComponentProps {
   workspace: string;
 }
+
 function FileComponent(props: fileComponentProps) {
   const workspace = props.workspace
+
   const [directoryPath, setDirectoryPath] = useState('');
   const [fileName, setFileName] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [fileToUpload, setFileToUpload] = useState('');
+
   const dispatch = useDispatch();
   const files: File[] = useSelector((state: RootState) => state.files);
 
   useEffect(() => {
     fetchFiles();
   }, []);
-  useEffect(() => {
-    console.log({workspace})
-  }, [workspace]);
 
   const handleUploadFile = async () => {
-      // Create a new FormData object
     const formData = new FormData();
-    // Append the file to the FormData object
     formData.append('file', fileToUpload);
 
-    // Define custom headers
     const config: AxiosRequestConfig = {
       headers: {
-        'Content-Type': 'application/octet-stream', // Set the desired content type here
+        // Attempt 1 to set required content type for POST endpoint
+        'Content-Type': 'application/octet-stream',
         'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
       },
       transformRequest: [(data: any, headers: any) => {
-        // Ensure to set the desired Content-Type header
+        // Attempt 2 to set required content type for POST endpoint
         headers['Content-Type'] = 'application/octet-stream';
-        // If the data is a FormData object, return it directly
         if (data instanceof FormData) {
           return data;
         }
-        // Otherwise, create a new FormData object and append the file to it
         const formData = new FormData();
         formData.append('file', data);
         return formData;
       }],
     };
 
+    const instance = axios.create();
+    // Attempt 3 to set required content type for POST endpoint- if this still doesn't work, axios might just not be ideal
+    instance.defaults.headers.post['Content-Type'] = 'application/octet-stream'
+
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
         formData,
         config
@@ -129,16 +128,16 @@ function FileComponent(props: fileComponentProps) {
         <Table striped bordered hover >
           <thead>
             <tr>
-              <th>File Name:</th>
               <th>Directory Path:</th>
+              <th>File Name:</th>
               <th>Length:</th>
             </tr>
           </thead>
           <tbody>
           {files.map((file: File) => (
             <tr key={file.filePath}>
-              <td>{file.filename}</td>
               <td>{file.directoryPath}</td>
+              <td>{file.filename}</td>
               <td>{file.contentLength}</td>
               <td>
                 <Button variant="danger" onClick={() => handleDeleteFile(file.directoryPath, file.filename)}>Delete</Button>
@@ -150,6 +149,7 @@ function FileComponent(props: fileComponentProps) {
           ) : (
         <p>No files found</p>
       )}
+
     </div>
   );
 };

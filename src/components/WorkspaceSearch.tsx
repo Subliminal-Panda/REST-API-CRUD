@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+
 import { fetchFilesSuccess } from '../redux/reducers/filesReducer';
 import FileComponent from './FileComponent';
 
@@ -10,6 +11,7 @@ function WorkspaceSearch() {
     const [validWorkspace, setValidWorkspace] = useState(false)
 
     const dispatch = useDispatch()
+
     const fetchFiles = async () => {
         try {
             const response = await axios.get(
@@ -27,9 +29,11 @@ function WorkspaceSearch() {
             console.error('Error fetching files:', error);
         }
     };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWorkspace(e.target.value)
     }
+
     return (
         <div>
             <Card className="pt-3 pb-2 py-5 container">
@@ -48,12 +52,14 @@ function WorkspaceSearch() {
                         Find Files
                     </Button>
                 </Card.Body>
+
                 {validWorkspace ? 
                     <FileComponent workspace={workspace} /> : 
                     <p>
                         Please submit a valid workspace to query files.
                     </p>
                 }
+
             </Card>
         </div>
     );

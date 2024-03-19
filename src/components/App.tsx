@@ -1,5 +1,4 @@
 import '../styles/App.css';
-import FileComponent from './FileComponent';
 import WorkspaceSearch from './WorkspaceSearch';
 
 function App() {

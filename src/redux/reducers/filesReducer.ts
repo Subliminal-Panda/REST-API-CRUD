@@ -7,7 +7,6 @@ enum ActionTypes {
   DELETE_FILE_SUCCESS = 'DELETE_FILE_SUCCESS'
 }
 
-// Define action creators
 export const fetchFilesSuccess = (files: File[]) => ({
   type: ActionTypes.FETCH_FILES_SUCCESS,
   payload: files
@@ -28,10 +27,8 @@ export const deleteFileSuccess = (filePath: string) => ({
   payload: filePath
 });
 
-// Define initial state
 const initialState: File[] = [];
 
-// Define reducer
 const filesReducer = (state: File[] = initialState, action: any) => {
   switch (action.type) {
     case ActionTypes.FETCH_FILES_SUCCESS:

@@ -1,5 +1,6 @@
-import { ActionTypes, File, FileActionTypes } from '../types/fileType';
 import { Dispatch } from 'redux';
+
+import { ActionTypes, File, FileActionTypes } from '../types/fileType';
 import { fetchFilesAPI } from '../../services/fileService';
 
 export const fetchFilesRequest = (): FileActionTypes => ({
@@ -20,8 +21,8 @@ export const fetchFiles = () => {
   return async (dispatch: Dispatch<FileActionTypes>) => {
     dispatch(fetchFilesRequest());
     try {
-      const response = await fetchFilesAPI(); // Assuming fetchFilesAPI is a function to fetch files from the API
-      const files = response.data; // Assuming response.data contains an array of files
+      const response = await fetchFilesAPI();
+      const files = response.data;
       dispatch(fetchFilesSuccess(files));
     } catch (error: any) {
       dispatch(fetchFilesFailure(error.message));

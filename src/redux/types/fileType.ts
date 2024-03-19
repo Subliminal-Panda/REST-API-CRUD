@@ -5,7 +5,6 @@ export interface File {
     contentLength: number;
   }
   
-  // Define types for actions
   export enum ActionTypes {
     FETCH_FILES_REQUEST = 'FETCH_FILES_REQUEST',
     FETCH_FILES_SUCCESS = 'FETCH_FILES_SUCCESS',
