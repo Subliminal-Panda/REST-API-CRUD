@@ -93,7 +93,7 @@ function FileComponent(props: fileComponentProps) {
 
   return (
     <div className="container">
-      <Button variant="info" onClick={handleShowModal} className="w-25 mb-3" >Add file to {workspace} workspace</Button>
+      <Button variant="info" onClick={handleShowModal} className="w-15 mb-3" >Add file to workspace</Button>
       <Modal show={showModal} onHide={handleHideModal} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Add file to {workspace} workspace</Modal.Title>
