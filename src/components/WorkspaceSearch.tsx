@@ -17,10 +17,10 @@ function WorkspaceSearch() {
         setIsLoading(true)
         try {
             const response = await axios.get(
-                'https://api.optilogic.app/v0/' + workspace + '/files',
+                process.env.REACT_APP_OPTILOGIC_API + workspace + '/files',
                 {
                     headers: {
-                        'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
+                        'X-APP-KEY': process.env.REACT_APP_OPTILOGIC_APP_KEY
                     }
                 }
             );
@@ -44,19 +44,19 @@ function WorkspaceSearch() {
                 <Card.Body>
                     {!isLoading ? (
                         <>
-                            <Form className="row align-items-center justify-content-center">
-                                <Form.Group className="mb-3 w-75" controlId="workspace">
+                            <Form onSubmit={fetchFiles} className="row align-items-center justify-content-center">
+                                <Form.Group className="w-75" controlId="workspace">
                                     <Form.Control 
                                         type="text"
                                         value={workspace}
                                         placeholder="Workspace Name"
                                         onChange={handleChange} 
                                         />
+                                    <Button variant="primary" type="submit"  className="mt-3">
+                                        Find Files
+                                    </Button>
                                 </Form.Group>
                             </Form>
-                            <Button variant="primary" onClick={fetchFiles}  className="w-25">
-                                Find Files
-                            </Button>
                         </>
                     ) : (
                         <Spinner />

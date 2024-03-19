@@ -35,7 +35,7 @@ function FileComponent(props: fileComponentProps) {
       headers: {
         // Attempt 1 to set required content type for POST endpoint
         'Content-Type': 'application/octet-stream',
-        'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
+        'X-APP-KEY': process.env.REACT_APP_OPTILOGIC_APP_KEY
       },
       transformRequest: [(data: any, headers: any) => {
         // Attempt 2 to set required content type for POST endpoint
@@ -55,7 +55,7 @@ function FileComponent(props: fileComponentProps) {
 
     try {
       const response = await instance.post(
-        'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
+        process.env.REACT_APP_OPTILOGIC_API + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
         formData,
         config
       );
@@ -71,10 +71,10 @@ function FileComponent(props: fileComponentProps) {
   const handleDeleteFile = async (directoryPath: string, fileName: string) => {
     try {
       await axios.delete(
-        'https://api.optilogic.app/v0/' + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
+        process.env.REACT_APP_OPTILOGIC_API + workspace + '/file/' + directoryPath.replace(/^\/|\/$/g, '') + '/' + fileName.replace(/^\/|\/$/g, ''),
         {
           headers: {
-            'X-APP-KEY': 'op_NTA4NDhmMzUtOTc4OC00YWI1LTk3ZWMtZTFjMmMzYzMwMWQz'
+            'X-APP-KEY': process.env.REACT_APP_OPTILOGIC_APP_KEY
           }
         }
       );
